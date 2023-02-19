@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-class UserSigninRequest extends FormRequest
+class UserSigninRequest1 extends FormRequest
 {
     public function authorize()
     {
