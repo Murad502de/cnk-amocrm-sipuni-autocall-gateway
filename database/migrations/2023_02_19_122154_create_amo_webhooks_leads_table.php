@@ -16,6 +16,9 @@ class CreateAmoWebhooksLeadsTable extends Migration
         Schema::create('amo_webhooks_leads', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('lead_id');
+            $table->bigInteger('last_modified');
+            $table->text('data');
         });
     }
 

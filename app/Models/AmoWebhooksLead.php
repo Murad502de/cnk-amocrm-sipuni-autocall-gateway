@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class AmoWebhooksLead extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'lead_id',
+        'last_modified',
+        'data',
+    ];
+    protected $hidden = [
+        'id',
+    ];
 }

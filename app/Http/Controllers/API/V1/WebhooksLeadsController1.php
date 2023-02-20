@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\V1\WebhooksLeads1;
 use App\Http\Requests\API\V1\WebhooksLeadsAddRequest1;
 use App\Http\Requests\API\V1\WebhooksLeadsChangeStageRequest1;
 use App\Http\Requests\API\V1\WebhooksLeadsUpdateRequest1;
@@ -28,6 +29,18 @@ class WebhooksLeadsController1 extends Controller
         $this->handle($request->all()['leads']['status'][0]);
 
         return response()->json(['message' => 'success by changeStage'], Response::HTTP_OK);
+    }
+    public function index(WebhooksLeads1 $request)
+    {
+        if (isset($request->all()['leads']['add'])) {
+            return 'index@add';
+        }
+
+        if (isset($request->all()['leads']['update'])) {
+            return 'index@update';
+        }
+
+        return response()->json(['message' => 'OK'], Response::HTTP_OK);
     }
     private function handle(array $data)
     {

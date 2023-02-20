@@ -2,26 +2,32 @@
 
 namespace App\Http\Requests\API\V1;
 
-use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 
-class UserSigninRequest1 extends FormRequest
+class WebhooksLeads1 extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
     public function authorize()
     {
-        return User::where('email', $this->email)
-            ->where('password', md5($this->password))
-            ->exists();
+        return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
     public function rules()
     {
         return [
-            'email'    => 'required',
-            'password' => 'required',
+            'leads' => 'required',
         ];
     }
 
