@@ -14,9 +14,9 @@ Route::prefix('v1')->group(function () {
         Route::prefix('calls')->group(function () {
             Route::get('/', [CallController1::class, 'index']);
             Route::post('/', [CallController1::class, 'create']);
-            Route::get('/{webinar:uuid}', [CallController1::class, 'read']);
-            Route::put('/{webinar:uuid}', [CallController1::class, 'update']);
-            Route::delete('/{webinar:uuid}', [CallController1::class, 'delete']);
+            Route::get('/{call:uuid}', [CallController1::class, 'read']);
+            Route::put('/{call:uuid}', [CallController1::class, 'update']);
+            Route::delete('/{call:uuid}', [CallController1::class, 'delete']);
         });
     });
 

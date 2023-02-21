@@ -16,6 +16,11 @@ class CreateCallsTable extends Migration
         Schema::create('calls', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->string('uuid')->index();
+            $table->string('name');
+            $table->bigInteger('amo_pipeline_id');
+            $table->bigInteger('amo_target_status_id');
+            $table->bigInteger('sipuni_call_id');
         });
     }
 
