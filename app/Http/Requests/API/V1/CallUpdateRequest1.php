@@ -13,7 +13,7 @@ class CallUpdateRequest1 extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
