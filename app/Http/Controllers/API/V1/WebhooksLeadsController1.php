@@ -14,13 +14,13 @@ class WebhooksLeadsController1 extends Controller
 {
     public function create(WebhooksLeadsAddRequest1 $request)
     {
-        $this->handle($request->all()['leads']['add'][0]);
+        $this->webhookAdd($request->all());
 
         return response()->json(['message' => 'success by create'], Response::HTTP_OK);
     }
     public function update(WebhooksLeadsUpdateRequest1 $request)
     {
-        $this->handle($request->all()['leads']['update'][0]);
+        $this->webhookStatus($request->all());
 
         return response()->json(['message' => 'success by update'], Response::HTTP_OK);
     }
@@ -33,11 +33,11 @@ class WebhooksLeadsController1 extends Controller
     public function index(WebhooksLeads1 $request)
     {
         if (isset($request->all()['leads']['add'])) {
-            return 'index@add';
+            return $this->webhookAdd($request->all());
         }
 
-        if (isset($request->all()['leads']['update'])) {
-            return 'index@update';
+        if (isset($request->all()['leads']['status'])) {
+            return $this->webhookStatus($request->all());
         }
 
         return response()->json(['message' => 'OK'], Response::HTTP_OK);
@@ -48,12 +48,18 @@ class WebhooksLeadsController1 extends Controller
             $lead = AmoWebhooksLead::getLeadByAmoId($data['id']);
 
             if ($lead) {
-                if ($lead->last_modified < (int) $data['last_modified']) {
-                    AmoWebhooksLead::updateLead($data['id'], $data['last_modified'], $data);
-                }
+                AmoWebhooksLead::updateLead($data['id'], time(), $data);
             } else {
-                AmoWebhooksLead::createLead($data['id'], $data['last_modified'], $data);
+                AmoWebhooksLead::createLead($data['id'], time(), $data);
             }
         }
+    }
+    private function webhookAdd(array $data)
+    {
+        $this->handle($data['leads']['add'][0]);
+    }
+    private function webhookStatus(array $data)
+    {
+        $this->handle($data['leads']['status'][0]);
     }
 }
