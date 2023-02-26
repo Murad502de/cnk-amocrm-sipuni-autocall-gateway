@@ -59,6 +59,16 @@ class AmoWebhooksLead extends Model
     {
         return (int) self::getLeadWebhookData($leadWebhook)['pipeline_id'];
     }
+    public static function getMainContactIdFromLeadBody(array $lead): ?int
+    {
+        foreach ($lead['_embedded']['contacts'] as $contact) {
+            if ($contact['is_main']) {
+                return $contact['id'];
+            }
+        }
+
+        return null;
+    }
 
     /* FETCH-METHODS */
     public static function fetchLeadById(int $id): ?array
