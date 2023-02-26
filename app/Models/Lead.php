@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
+use App\Exceptions\NotFoundException;
+use App\Services\amoAPI\amoAPIHub;
 use App\Traits\Model\generateUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
-use App\Exceptions\NotFoundException;
 use Illuminate\Http\Response;
-
+use Illuminate\Support\Facades\Log;
 
 class Lead extends Model
 {
     use HasFactory, generateUuid;
 
-    public static $AMO_API = null;
+    public $AMO_API = null;
 
     protected $fillable = [
         'uuid',
@@ -28,6 +28,10 @@ class Lead extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function __construct() {
+        $this->AMO_API = new amoAPIHub(amoCRM::getAuthData());
+    }
 
     public function call()
     {
@@ -45,9 +49,9 @@ class Lead extends Model
     }
 
     /* FETCH-METHODS */
-    public static function fetchLeadById(int $id): array
+    public function fetchLeadById(int $id): array
     {
-        $findLeadByIdResponse = self::$AMO_API->findLeadById($id);
+        $findLeadByIdResponse = $this->AMO_API->findLeadById($id);
 
         if ($findLeadByIdResponse['code'] !== Response::HTTP_OK) {
             throw new NotFoundException('lead not found by id: ' . $id);
@@ -55,9 +59,9 @@ class Lead extends Model
 
         return $findLeadByIdResponse['body'];
     }
-    public static function fetchContactById(int $id): array
+    public function fetchContactById(int $id): array
     {
-        $findLeadByIdResponse = self::$AMO_API->findContactById($id);
+        $findLeadByIdResponse = $this->AMO_API->findContactById($id);
 
         if ($findLeadByIdResponse['code'] !== Response::HTTP_OK) {
             throw new NotFoundException('main contact not found');
@@ -80,5 +84,32 @@ class Lead extends Model
         //         'amo_pipeline_id'     => self::getLeadWebhookPipelineId($leadWebhook),
         //     ]);
         // }
+    }
+
+    public static function initStatic(array $params)
+    {
+        // self::$STAGE_LOSS_ID         = (int) config('services.amoCRM.loss_stage_id');
+        // self::$STAGE_SUCCESS_ID      = (int) config('services.amoCRM.successful_stage_id');
+        // self::$BASIC_LEAD            = self::fetchLeadById($params['lead_amo_id']);
+        // self::$BROKER_ID             = (int) $params['broker_amo_id'];
+        // self::$BROKER_NAME           = $params['broker_amo_name'];
+        // self::$MANAGER_ID            = (int) $params['manager_amo_id'];
+        // self::$MANAGER_NAME          = $params['manager_amo_name'];
+        // self::$CREATED_LEAD_TYPE     = $params['created_lead_type'];
+        // self::$MESSAGE_FOR_BROKER    = $params['message_for_broker'];
+        // self::$TASK_TYPE_CONTROLL_ID = (int) config('services.amoCRM.constant_task_type_id__controll');
+        // self::$EXCLUDE_CF            = [
+        //     (int) config('services.amoCRM.exclude_cf_utm_source_id'),
+        //     (int) config('services.amoCRM.exclude_cf_utm_medium_id'),
+        //     (int) config('services.amoCRM.exclude_cf_utm_campaign_id'),
+        //     (int) config('services.amoCRM.exclude_cf_utm_term_id'),
+        //     (int) config('services.amoCRM.exclude_cf_utm_content_id'),
+        //     (int) config('services.amoCRM.exclude_cf_roistat_id'),
+        //     (int) config('services.amoCRM.exclude_cf_roistat_marker_id'),
+        //     (int) config('services.amoCRM.exclude_cf_source_id'),
+        //     (int) config('services.amoCRM.exclude_cf_mortgage_created_id'),
+        //     (int) config('services.amoCRM.exclude_cf_broker_selected_id'),
+        //     (int) config('services.amoCRM.exclude_cf_lead_manager_id'),
+        // ];
     }
 }

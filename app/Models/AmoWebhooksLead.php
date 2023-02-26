@@ -84,6 +84,10 @@ class AmoWebhooksLead extends Model
         foreach ($leadWebhooks as $leadWebhook) {
             Log::info(__METHOD__, [$leadWebhook->lead_id]); //DELETE
 
+            $lead = (new Lead())->fetchLeadById($leadWebhook->lead_id);
+
+            Log::info(__METHOD__, [$lead]); //DELETE
+
             Lead::updateIfExist($leadWebhook);
             self::processWebhook($leadWebhook);
 
