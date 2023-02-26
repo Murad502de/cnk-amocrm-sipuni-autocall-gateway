@@ -75,6 +75,10 @@ class AmoWebhooksLead extends Model
     {
         return (new Lead())->fetchLeadById($id);
     }
+    public static function fetchContactById(int $id): ?array
+    {
+        return (new Lead())->fetchContactById($id);
+    }
 
     /* PROCEDURES-METHODS */
     public static function processWebhook(AmoWebhooksLead $leadWebhook)
@@ -98,9 +102,12 @@ class AmoWebhooksLead extends Model
         foreach ($leadWebhooks as $leadWebhook) {
             Log::info(__METHOD__, [$leadWebhook->lead_id]); //DELETE
 
-            $lead = self::fetchLeadById($leadWebhook->lead_id);
+            $lead        = self::fetchLeadById($leadWebhook->lead_id);
+            $mainContact = self::fetchContactById(
+                self::getMainContactIdFromLeadBody($lead['id'])
+            );
 
-            Log::info(__METHOD__, [$lead]); //DELETE
+            Log::info(__METHOD__, [$mainContact]); //DELETE
 
             Lead::updateIfExist($leadWebhook);
             self::processWebhook($leadWebhook);
