@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Exceptions\NotFoundException;
 use App\Services\amoAPI\amoAPIHub;
-use App\Traits\Model\generateUuid;
+use App\Traits\Model\generateUuidManualTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class Lead extends Model
 {
-    use HasFactory, generateUuid;
+    use HasFactory, generateUuidManualTrait;
 
     public $AMO_API = null;
 

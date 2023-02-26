@@ -69,50 +69,90 @@ class AmoWebhooksLead extends Model
 
         return null;
     }
+    public static function getMainContactWorkNumber($contact): ?string
+    {
+        if (!$contact) {
+            return null;
+        }
+
+        foreach ($contact['custom_fields_values'] as $customField) {
+            if ($customField['field_code'] === 'PHONE') {
+                foreach ($customField['values'] as $customFieldValue) {
+                    if ($customFieldValue['enum_code'] === 'WORK') {
+                        return $customFieldValue['value'];
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 
     /* FETCH-METHODS */
     public static function fetchLeadById(int $id): ?array
     {
+        if (!$id) {
+            return null;
+        }
+
         return (new Lead())->fetchLeadById($id);
     }
     public static function fetchContactById(int $id): ?array
     {
+        if (!$id) {
+            return null;
+        }
+
         return (new Lead())->fetchContactById($id);
     }
 
     /* PROCEDURES-METHODS */
-    public static function processWebhook(AmoWebhooksLead $leadWebhook)
+    public static function processWebhook(AmoWebhooksLead $leadWebhook, string $mainContactNumber)
     {
-        Log::info(__METHOD__); //DELETE
+        $leadWebhookData = json_decode($leadWebhook->data, true);
 
-        $lead = Lead::getByAmoId((int) $leadWebhook->lead_id);
+        if ($call = Call::whereAmoPipelineId((int) $leadWebhookData['pipeline_id'])->first()) {
+            Log::info(__METHOD__, ['leadWebhook is target']); //DELETE
 
-        Log::info(__METHOD__, [$lead]); //DELETE
+            $lead = new Lead();
+
+            $lead->uuid                = Lead::generateUuid();
+            $lead->amo_id              = $leadWebhookData['id'];
+            $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
+            $lead->main_contact_number = $mainContactNumber;
+            $lead->call_id             = $call->id;
+
+            $lead->save();
+
+            //TODO set job
+        }
     }
 
     /* SCHEDULER-METHODS */
     public static function parseRecentWebhooks()
     {
-        Log::info(__METHOD__); //DELETE
-
         $leadWebhooks = self::getLeadWebhooks();
 
-        Log::info(__METHOD__, [$leadWebhooks]); //DELETE
-
         foreach ($leadWebhooks as $leadWebhook) {
-            Log::info(__METHOD__, [$leadWebhook->lead_id]); //DELETE
+            $lead              = self::fetchLeadById($leadWebhook->lead_id);
+            $mainContact       = self::fetchContactById((int) self::getMainContactIdFromLeadBody($lead));
+            $mainContactNumber = (string) self::getMainContactWorkNumber($mainContact);
+            // $leadWebhookData   = json_decode($leadWebhook->data, true);
 
-            $lead        = self::fetchLeadById($leadWebhook->lead_id);
-            $mainContact = self::fetchContactById(
-                self::getMainContactIdFromLeadBody($lead['id'])
-            );
+            Log::info(__METHOD__, ['mainContactNumber: ' . $mainContactNumber]); //DELETE
 
-            Log::info(__METHOD__, [$mainContact]); //DELETE
+            if ($lead = Lead::getByAmoId((int) $leadWebhook->lead_id)) {
+                Log::info(__METHOD__, ['lead must update']); //DELETE
 
-            Lead::updateIfExist($leadWebhook);
-            self::processWebhook($leadWebhook);
+                $lead->update([
+                    'main_contact_number' => $mainContactNumber,
+                    // 'amo_pipeline_id'     => (int) $leadWebhookData['pipeline_id'],
+                ]);
+            } else {
+                Log::info(__METHOD__, ['lead must process']); //DELETE
 
-            Log::info(__METHOD__, ['delete leadWebhook: ' . $leadWebhook->lead_id]); //DELETE
+                self::processWebhook($leadWebhook, $mainContactNumber);
+            }
 
             // $leadWebhook->delete(); //TODO
         }
