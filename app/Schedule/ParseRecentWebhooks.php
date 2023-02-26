@@ -3,14 +3,11 @@
 namespace App\Schedule;
 
 use App\Schedule\Webhooks\ChangeStageWebhooks;
-use Illuminate\Support\Facades\Log;
+use App\Traits\Schedule\Services\AmoCRM\AmoTokenMiddlewareTrait;
 
 class ParseRecentWebhooks
 {
-    public function __construct()
-    {
-        Log::info(__METHOD__, ['qwertyuiop']); //DELETE
-    }
+    use AmoTokenMiddlewareTrait;
 
     public function __invoke()
     {
