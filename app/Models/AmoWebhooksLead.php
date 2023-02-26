@@ -51,7 +51,7 @@ class AmoWebhooksLead extends Model
     {
         return json_decode($leadWebhook->data, true);
     }
-    public static function getLeadWebhookStatusId(AmoWebhooksLead $leadWebhook): int
+    public static function getLeadWebhookMainContactNumber(AmoWebhooksLead $leadWebhook): int
     {
         return (int) self::getLeadWebhookData($leadWebhook)['status_id'];
     }
@@ -60,27 +60,32 @@ class AmoWebhooksLead extends Model
         return (int) self::getLeadWebhookData($leadWebhook)['pipeline_id'];
     }
 
+    /* PROCEDURES-METHODS */
+    public static function processWebhook(AmoWebhooksLead $leadWebhook)
+    {
+        Log::info(__METHOD__); //DELETE
+
+        $lead = Lead::getByAmoId((int) $leadWebhook->lead_id);
+
+        Log::info(__METHOD__, [$lead]); //DELETE
+    }
+
     /* SCHEDULER-METHODS */
     public static function parseRecentWebhooks()
     {
         Log::info(__METHOD__); //DELETE
 
-        self::initStatic();
+        // self::initStatic();
 
         $leadWebhooks = self::getLeadWebhooks();
+
+        Log::info(__METHOD__, [$leadWebhooks]); //DELETE
 
         foreach ($leadWebhooks as $leadWebhook) {
             Log::info(__METHOD__, [$leadWebhook->lead_id]); //DELETE
 
-            $lead = Lead::getByAmoId((int) $leadWebhook->lead_id);
-
-            if ($lead) {
-                $lead->update([
-                    'amo_status_id'   => self::getLeadWebhookStatusId($leadWebhook),
-                    'amo_pipeline_id' => self::getLeadWebhookPipelineId($leadWebhook),
-                ]);
-                self::processWebhook($lead);
-            }
+            Lead::updateIfExist($leadWebhook);
+            self::processWebhook($leadWebhook);
 
             Log::info(__METHOD__, ['delete leadWebhook: ' . $leadWebhook->lead_id]); //DELETE
 
