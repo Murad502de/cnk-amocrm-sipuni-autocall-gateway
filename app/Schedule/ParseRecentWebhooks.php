@@ -3,11 +3,17 @@
 namespace App\Schedule;
 
 use App\Schedule\Webhooks\ChangeStageWebhooks;
-use App\Traits\Schedule\Services\AmoCRM\AmoTokenMiddlewareTrait;
+use App\Traits\Http\Middleware\Services\AmoCrm\amoTokenTrait;
+use Illuminate\Support\Facades\Log;
 
 class ParseRecentWebhooks
 {
-    use AmoTokenMiddlewareTrait;
+    use amoTokenTrait;
+
+    public function __construct()
+    {
+        self::amoToken();
+    }
 
     public function __invoke()
     {
