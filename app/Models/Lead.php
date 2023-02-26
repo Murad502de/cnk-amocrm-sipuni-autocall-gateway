@@ -6,10 +6,15 @@ use App\Traits\Model\generateUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\NotFoundException;
+use Illuminate\Http\Response;
+
 
 class Lead extends Model
 {
     use HasFactory, generateUuid;
+
+    public static $AMO_API = null;
 
     protected $fillable = [
         'uuid',
@@ -37,6 +42,28 @@ class Lead extends Model
     public static function getByAmoId(int $id): ?Lead
     {
         return self::whereAmoId($id)->first();
+    }
+
+    /* FETCH-METHODS */
+    public static function fetchLeadById(int $id): array
+    {
+        $findLeadByIdResponse = self::$AMO_API->findLeadById($id);
+
+        if ($findLeadByIdResponse['code'] !== Response::HTTP_OK) {
+            throw new NotFoundException('lead not found by id: ' . $id);
+        }
+
+        return $findLeadByIdResponse['body'];
+    }
+    public static function fetchContactById(int $id): array
+    {
+        $findLeadByIdResponse = self::$AMO_API->findContactById($id);
+
+        if ($findLeadByIdResponse['code'] !== Response::HTTP_OK) {
+            throw new NotFoundException('main contact not found');
+        }
+
+        return $findLeadByIdResponse['body'];
     }
 
     public static function updateIfExist(AmoWebhooksLead $leadWebhook)

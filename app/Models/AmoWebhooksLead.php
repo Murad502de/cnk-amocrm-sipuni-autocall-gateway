@@ -89,7 +89,7 @@ class AmoWebhooksLead extends Model
 
             Log::info(__METHOD__, ['delete leadWebhook: ' . $leadWebhook->lead_id]); //DELETE
 
-            $leadWebhook->delete();
+            // $leadWebhook->delete(); //TODO
         }
     }
 }
