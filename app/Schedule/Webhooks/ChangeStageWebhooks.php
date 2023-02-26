@@ -2,12 +2,12 @@
 
 namespace App\Schedule\Webhooks;
 
-use App\Models\Webhooks\ChangeStageWebhook;
+use App\Models\AmoWebhooksLead;
 
 class ChangeStageWebhooks
 {
     public function __invoke()
     {
-        ChangeStageWebhook::parseRecentWebhooks();
+        AmoWebhooksLead::parseRecentWebhooks();
     }
 }

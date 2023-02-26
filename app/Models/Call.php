@@ -20,4 +20,9 @@ class Call extends Model
     protected $hidden = [
         'id',
     ];
+
+    public function leads()
+    {
+        return $this->hasMany(Lead::class);
+    }
 }
