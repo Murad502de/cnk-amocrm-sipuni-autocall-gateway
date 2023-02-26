@@ -29,7 +29,8 @@ class Lead extends Model
         'updated_at',
     ];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->AMO_API = new amoAPIHub(amoCRM::getAuthData());
     }
 
@@ -78,12 +79,16 @@ class Lead extends Model
 
         Log::info(__METHOD__, [$lead]); //DELETE
 
-        // if ($lead) {
-        //     $lead->update([
-        //         'main_contact_number' => self::getLeadWebhookMainContactNumber($leadWebhook),
-        //         'amo_pipeline_id'     => self::getLeadWebhookPipelineId($leadWebhook),
-        //     ]);
-        // }
+        if ($lead) {
+            Log::info(__METHOD__, ['lead must update']); //DELETE
+
+            // if ($lead) {
+            //     $lead->update([
+            //         'main_contact_number' => self::getLeadWebhookMainContactNumber($leadWebhook),
+            //         'amo_pipeline_id'     => self::getLeadWebhookPipelineId($leadWebhook),
+            //     ]);
+            // }
+        }
     }
 
     public static function initStatic(array $params)

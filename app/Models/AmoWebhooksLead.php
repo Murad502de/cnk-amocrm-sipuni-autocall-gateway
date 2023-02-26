@@ -60,6 +60,12 @@ class AmoWebhooksLead extends Model
         return (int) self::getLeadWebhookData($leadWebhook)['pipeline_id'];
     }
 
+    /* FETCH-METHODS */
+    public static function fetchLeadById(int $id): ?array
+    {
+        return (new Lead())->fetchLeadById($id);
+    }
+
     /* PROCEDURES-METHODS */
     public static function processWebhook(AmoWebhooksLead $leadWebhook)
     {
@@ -75,8 +81,6 @@ class AmoWebhooksLead extends Model
     {
         Log::info(__METHOD__); //DELETE
 
-        // self::initStatic();
-
         $leadWebhooks = self::getLeadWebhooks();
 
         Log::info(__METHOD__, [$leadWebhooks]); //DELETE
@@ -84,7 +88,7 @@ class AmoWebhooksLead extends Model
         foreach ($leadWebhooks as $leadWebhook) {
             Log::info(__METHOD__, [$leadWebhook->lead_id]); //DELETE
 
-            $lead = (new Lead())->fetchLeadById($leadWebhook->lead_id);
+            $lead = self::fetchLeadById($leadWebhook->lead_id);
 
             Log::info(__METHOD__, [$lead]); //DELETE
 
