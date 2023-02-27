@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Jobs\Sipuni\AddLeadToAutoCallListJob;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -124,7 +125,7 @@ class AmoWebhooksLead extends Model
 
             $lead->save();
 
-            //TODO set job
+            AddLeadToAutoCallListJob::dispatch($lead);
         }
     }
 
