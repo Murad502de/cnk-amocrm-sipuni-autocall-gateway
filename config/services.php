@@ -21,4 +21,8 @@ return [
         'successful_stage_id' => env('AMOCRM_SUCCESSFUL_STAGE_ID', null),
         'loss_stage_id'       => env('AMOCRM_LOSS_STAGE_ID', null),
     ],
+    'sipuni'   => [
+        'user'          => env('SIPUNI_USER', null),
+        'client_secret' => env('SIPUNI_SECRET_KEY', null),
+    ],
 ];
