@@ -11,6 +11,7 @@ class SipuniAPI
 
     public function __construct(string $user, string $secretKey)
     {
+        Log::info(__METHOD__, ['SipuniAPI/construct']); //DELETE
         Log::info(__METHOD__, [$user, $secretKey]); //DELETE
 
         $this->user      = $user;
@@ -19,7 +20,7 @@ class SipuniAPI
 
     public function addNumberToAutoCall(string $autocallId, string $number)
     {
-        Log::info(__METHOD__); //DELETE
+        Log::info(__METHOD__, [$autocallId, $number]); //DELETE
 
         $again      = '1';
         $hashString = join('+', [$again, $autocallId, $number, $this->user, $this->secretKey]);
