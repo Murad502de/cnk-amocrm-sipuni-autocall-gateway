@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Sipuni;
 
+use App\Jobs\Middleware\AmoTokenExpirationControl;
 use App\Models\Lead;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,6 +15,8 @@ class AddLeadToAutoCallListJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    private $lead;
+
     /**
      * Create a new job instance.
      *
@@ -21,7 +24,9 @@ class AddLeadToAutoCallListJob implements ShouldQueue
      */
     public function __construct(Lead $lead)
     {
-        Log::info(__METHOD__); //DELETE
+        Log::info(__METHOD__, [$lead]); //DELETE
+
+        $this->lead = $lead;
     }
 
     /**
@@ -31,6 +36,11 @@ class AddLeadToAutoCallListJob implements ShouldQueue
      */
     public function handle()
     {
-        Log::info(__METHOD__); //DELETE
+        Log::info(__METHOD__, [$this->lead]); //DELETE
+    }
+
+    public function middleware()
+    {
+        return [new AmoTokenExpirationControl];
     }
 }
