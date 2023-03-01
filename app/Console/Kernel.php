@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Schedule\ParseRecentLeads;
 use App\Schedule\ParseRecentWebhooks;
 use App\Schedule\StartQueueProcessing;
 use Illuminate\Console\Scheduling\Schedule;
@@ -19,6 +20,10 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(new ParseRecentWebhooks)
             ->name('parse_recent_webhooks')
+            ->withoutOverlapping()
+            ->everyMinute();
+        $schedule->call(new ParseRecentLeads)
+            ->name('parse_recent_leads')
             ->withoutOverlapping()
             ->everyMinute();
         $schedule->exec((new StartQueueProcessing)(true))

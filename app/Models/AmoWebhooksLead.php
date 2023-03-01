@@ -10,7 +10,7 @@ class AmoWebhooksLead extends Model
 {
     use HasFactory;
 
-    private const PARSE_COUNT = 40;
+    private const PARSE_COUNT = 20;
 
     protected $fillable = [
         'lead_id',
