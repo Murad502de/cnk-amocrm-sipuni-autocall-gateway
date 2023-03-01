@@ -22,5 +22,10 @@ class ParseRecentLeads
         Log::info(__METHOD__, [self::PARSE_COUNT]); //DELETE
     }
 
-    
+    public static function getLeads()
+    {
+        return Lead::orderBy('id', 'asc')
+            ->take(self::PARSE_COUNT)
+            ->get();
+    }
 }
