@@ -17,10 +17,14 @@ class CreateCallsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->string('uuid')->nullable()->index();
-            $table->string('name')->nullable();
-            $table->bigInteger('amo_pipeline_id')->nullable();
-            $table->bigInteger('amo_target_status_id')->nullable();
-            $table->bigInteger('sipuni_call_id')->nullable();
+            $table->string('name');
+            $table->bigInteger('amo_pipeline_id');
+            $table->string('operator_extension_number');
+            $table->string('start_work_hours');
+            $table->string('start_work_minutes');
+            $table->string('end_work_hours');
+            $table->string('end_work_minutes');
+            $table->bigInteger('auto_redial_delay');
         });
     }
 

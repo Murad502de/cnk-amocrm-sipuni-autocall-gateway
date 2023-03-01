@@ -33,7 +33,6 @@ class SipuniAPI
             'user'       => $this->user,
             'hash'       => $hash,
         ]);
-
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -47,8 +46,30 @@ class SipuniAPI
 
         Log::info(__METHOD__, [$output]); //DELETE
     }
-    public function deleteNumberFromAutoCall()
+    public function deleteNumberFromAutoCall(string $autocallId, string $number)
     {
-        Log::info(__METHOD__); //DELETE
+        Log::info(__METHOD__, [$autocallId, $number]); //DELETE
+
+        $hashString = join('+', array($autocallId, $number, $this->user, $this->secretKey));
+        $hash       = md5($hashString);
+        $url        = 'https://sipuni.com/api/autocall/delete_number';
+        $query      = http_build_query(array(
+            'autocallId' => $autocallId,
+            'number'     => $number,
+            'user'       => $this->user,
+            'hash'       => $hash,
+        ));
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+
+        Log::info(__METHOD__, [$output]); //DELETE
     }
 }

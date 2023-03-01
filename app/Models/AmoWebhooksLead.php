@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Jobs\Sipuni\AddLeadToAutoCallListJob;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -121,11 +120,13 @@ class AmoWebhooksLead extends Model
             $lead->amo_id              = $leadWebhookData['id'];
             $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
             $lead->main_contact_number = $mainContactNumber;
+            $lead->available           = true;
+            $lead->when_available      = time();
             $lead->call_id             = $call->id;
 
             $lead->save();
 
-            AddLeadToAutoCallListJob::dispatch($lead);
+            // AddLeadToAutoCallListJob::dispatch($lead);
         }
     }
 

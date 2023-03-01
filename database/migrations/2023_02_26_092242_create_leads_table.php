@@ -20,6 +20,8 @@ class CreateLeadsTable extends Migration
             $table->bigInteger('amo_id');
             $table->bigInteger('amo_pipeline_id');
             $table->string('main_contact_number');
+            $table->boolean('available');
+            $table->bigInteger('when_available');
             $table->foreignId('call_id')->constrained()->cascadeOnDelete()->nullable();
         });
     }

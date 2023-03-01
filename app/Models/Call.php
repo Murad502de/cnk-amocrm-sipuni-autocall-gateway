@@ -14,8 +14,12 @@ class Call extends Model
         'uuid',
         'name',
         'amo_pipeline_id',
-        'amo_target_status_id',
-        'sipuni_call_id',
+        'operator_extension_number',
+        'start_work_hours',
+        'start_work_minutes',
+        'end_work_hours',
+        'end_work_minutes',
+        'auto_redial_delay',
     ];
     protected $hidden = [
         'id',
