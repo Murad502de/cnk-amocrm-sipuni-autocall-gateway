@@ -156,7 +156,7 @@ class AmoWebhooksLead extends Model
                 self::processWebhook($leadWebhook, $mainContactNumber);
             }
 
-            // $leadWebhook->delete(); //TODO
+            $leadWebhook->delete(); //TODO
         }
     }
 }
