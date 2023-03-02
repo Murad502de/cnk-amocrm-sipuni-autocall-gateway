@@ -33,7 +33,7 @@ class Lead extends Model
 
     public function __construct()
     {
-        $this->AMO_API = new amoAPIHub(amoCRM::getAuthData());
+        $this->AMO_API = new amoAPIHub(AmoCRM::getAuthData());
     }
 
     public function call()
