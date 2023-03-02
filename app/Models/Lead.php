@@ -21,6 +21,8 @@ class Lead extends Model
         'amo_id',
         'amo_pipeline_id',
         'main_contact_number',
+        'available',
+        'when_available',
         'call_id',
     ];
     protected $hidden = [
@@ -37,6 +39,32 @@ class Lead extends Model
     public function call()
     {
         return $this->belongsTo(Call::class);
+    }
+
+    public function isBusinessHours()
+    {
+        Log::info(__METHOD__, [$this]); //DELETE
+
+        $startHours   = $this->call->start_work_hours;
+        $startMinutes = $this->call->start_work_minutes;
+        $startStr     = date('Y-m-d') . ' ' . $startHours . ':' . $startMinutes;
+        $start        = strtotime($startStr);
+
+        Log::info(__METHOD__, ['startStr: ' . $startStr . ' || ' . 'start: ' . $start]); //DELETE
+
+        $endHours   = $this->call->end_work_hours;
+        $endMinutes = $this->call->end_work_minutes;
+        $endStr     = date('Y-m-d') . ' ' . $endHours . ':' . $endMinutes;
+        $end        = strtotime($endStr);
+
+        Log::info(__METHOD__, ['endStr: ' . $endStr . ' || ' . 'end: ' . $end]); //DELETE
+
+        $currentStr = date('Y-m-d H:i');
+        $current    = time();
+
+        Log::info(__METHOD__, ['currentStr: ' . $currentStr . ' || ' . 'current: ' . $current]); //DELETE
+
+        return time() >= $start && time() <= $end;
     }
 
     /* GETTERS-METHODS */
