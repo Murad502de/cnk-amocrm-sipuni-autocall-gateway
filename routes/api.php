@@ -1,10 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\V1\UserController1;
-use App\Http\Controllers\API\V1\WebhooksLeadsController1;
 use App\Http\Controllers\API\V1\CallController1;
 use App\Http\Controllers\API\V1\ServicesAmoCrmController1;
+use App\Http\Controllers\API\V1\UserController1;
+use App\Http\Controllers\API\V1\WebhooksLeadsController1;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\V1\WebhooksSipuniController1;
 
 Route::prefix('v1')->group(function () {
     Route::prefix('admin')->middleware('token')->group(function () {
@@ -24,6 +25,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('webhooks')->group(function () {
         Route::prefix('leads')->group(function () {
             Route::post('/', [WebhooksLeadsController1::class, 'index']);
+        });
+
+        Route::prefix('sipuni')->group(function () {
+            Route::post('/', [WebhooksSipuniController1::class, 'index']);
         });
     });
 
