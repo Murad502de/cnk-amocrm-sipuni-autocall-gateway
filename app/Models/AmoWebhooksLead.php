@@ -121,6 +121,7 @@ class AmoWebhooksLead extends Model
             $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
             $lead->main_contact_number = $mainContactNumber;
             $lead->available           = true;
+            $lead->processing          = false;
             $lead->when_available      = time();
             $lead->call_id             = $call->id;
 

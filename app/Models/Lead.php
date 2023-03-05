@@ -24,6 +24,7 @@ class Lead extends Model
         'available',
         'when_available',
         'call_id',
+        'processing',
     ];
     protected $hidden = [
         'id',
