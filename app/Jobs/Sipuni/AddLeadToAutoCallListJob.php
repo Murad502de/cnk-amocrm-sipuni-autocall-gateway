@@ -52,7 +52,7 @@ class AddLeadToAutoCallListJob implements ShouldQueue
         // );
 
         $user       = '042485';
-        $phone      = $this->lead->main_contact_number;
+        $phone      = preg_replace('/\D/', '', $this->lead->main_contact_number);
         $reverse    = '1';
         $antiaon    = '0';
         $sipnumber  = '206';
