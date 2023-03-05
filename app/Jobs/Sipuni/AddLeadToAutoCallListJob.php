@@ -79,7 +79,7 @@ class AddLeadToAutoCallListJob implements ShouldQueue
 
         curl_close($ch);
 
-        Log::info(__METHOD__, [$output]); //DELETE
+        Log::info(__METHOD__, $output); //DELETE
 
         $this->lead->delete();
     }
