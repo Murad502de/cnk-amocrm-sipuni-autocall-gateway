@@ -2,8 +2,8 @@
 
 namespace App\Schedule;
 
-use App\Models\Lead;
 use App\Jobs\Sipuni\AddLeadToAutoCallListJob;
+use App\Models\Lead;
 use Illuminate\Support\Facades\Log;
 
 // use App\Traits\Http\Middleware\Services\AmoCrm\amoTokenTrait;
@@ -32,6 +32,9 @@ class ParseRecentLeads
                 Log::info(__METHOD__, ['ok']); //DELETE
 
                 AddLeadToAutoCallListJob::dispatch($lead);
+
+                $lead->processing = true;
+                $lead->save();
             } else {
                 Log::info(__METHOD__, ['not ok']); //DELETE
             }
@@ -40,7 +43,8 @@ class ParseRecentLeads
 
     public static function getLeads()
     {
-        return Lead::whereAvailable(true)
+        return Lead::whereProcessing(false)
+            ->whereAvailable(true)
             ->orderBy('id', 'asc')
             ->take(self::PARSE_COUNT)
             ->get();
