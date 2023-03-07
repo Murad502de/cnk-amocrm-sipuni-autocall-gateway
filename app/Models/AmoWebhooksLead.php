@@ -119,7 +119,7 @@ class AmoWebhooksLead extends Model
             $lead->uuid                = Lead::generateUuid();
             $lead->amo_id              = $leadWebhookData['id'];
             $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
-            $lead->main_contact_number = $mainContactNumber;
+            $lead->main_contact_number = preg_replace('/\D/', '', $mainContactNumber);
             $lead->available           = true;
             $lead->processing          = false;
             $lead->when_available      = time();
