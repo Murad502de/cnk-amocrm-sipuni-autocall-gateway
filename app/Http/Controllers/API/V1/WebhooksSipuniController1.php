@@ -13,6 +13,10 @@ class WebhooksSipuniController1 extends Controller
     {
         Log::info(__METHOD__, $request->all()); //DELETE
 
+        if (isset($request->all()['status'])) {
+            Log::info(__METHOD__, ['callStatus: ' . $request->all()['status']]); //DELETE
+        }
+
         return response()->json(['success' => true], Response::HTTP_OK);
     }
 }
