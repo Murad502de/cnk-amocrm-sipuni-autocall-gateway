@@ -79,14 +79,14 @@ class SipuniAPI
         $url     = 'https://sipuni.com/api/callback/call_number';
         $reverse = '1';
         $antiaon = '0';
-        $query   = http_build_query(array(
+        $query   = http_build_query([
             'antiaon'   => $antiaon,
             'phone'     => $clientNumber,
             'reverse'   => $reverse,
             'sipnumber' => $operatorNumber,
             'user'      => $this->user,
-            'hash'      => md5(join('+', [$antiaon, $clientNumber, $reverse, $operatorNumber, $this->user, $this->secretKey,])),
-        ));
+            'hash'      => md5(join('+', [$antiaon, $clientNumber, $reverse, $operatorNumber, $this->user, $this->secretKey])),
+        ]);
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
