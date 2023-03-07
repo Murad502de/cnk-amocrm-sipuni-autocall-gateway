@@ -4,8 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-// use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
 
 class SipuniWebhooksEvent extends Model
 {
@@ -38,5 +37,25 @@ class SipuniWebhooksEvent extends Model
         self::whereCallId($callId)->update([
             'data' => json_encode($data),
         ]);
+    }
+
+    /* GETTERS */
+    public static function getCallWebhooks()
+    {
+        return self::orderBy('id', 'asc')
+            ->take(self::PARSE_COUNT)
+            ->get();
+    }
+
+    /* SCHEDULER-METHODS */
+    public static function parseRecentWebhooks()
+    {
+        $callWebhooks = self::getCallWebhooks();
+
+        foreach ($callWebhooks as $callWebhook) {
+            Log::info(__METHOD__, [$callWebhook]); //DELETE
+
+            // $callWebhook->delete(); //TODO
+        }
     }
 }
