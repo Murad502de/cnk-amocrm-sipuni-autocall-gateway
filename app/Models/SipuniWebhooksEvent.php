@@ -13,7 +13,7 @@ class SipuniWebhooksEvent extends Model
     private const PARSE_COUNT = 30;
 
     protected $fillable = [
-        'call_id',
+        'dst_num',
         'data',
     ];
     protected $hidden = [
@@ -21,20 +21,20 @@ class SipuniWebhooksEvent extends Model
     ];
 
     /* CRUD METHODS */
-    public static function createWebhook(string $callId, array $data): void
+    public static function createWebhook(string $dstNum, array $data): void
     {
         self::create([
-            'call_id' => $callId,
+            'dst_num' => $dstNum,
             'data'    => json_encode($data),
         ]);
     }
-    public static function getWebhookByCallId(string $callId): ?SipuniWebhooksEvent
+    public static function getWebhookByCallId(string $dstNum): ?SipuniWebhooksEvent
     {
-        return self::whereCallId($callId)->first();
+        return self::whereDstNum($dstNum)->first();
     }
-    public static function updateWebhook(string $callId, array $data): void
+    public static function updateWebhook(string $dstNum, array $data): void
     {
-        self::whereCallId($callId)->update([
+        self::whereDstNum($dstNum)->update([
             'data' => json_encode($data),
         ]);
     }

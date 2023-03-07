@@ -25,11 +25,11 @@ class WebhooksSipuniController1 extends Controller
 
     private function handle(array $data)
     {
-        if (isset($data['call_id'])) {
-            if (SipuniWebhooksEvent::whereCallId($data['call_id'])->exists()) {
-                SipuniWebhooksEvent::updateWebhook($data['call_id'], $data);
+        if (isset($data['dst_num'])) {
+            if (SipuniWebhooksEvent::whereDstNum($data['dst_num'])->exists()) {
+                SipuniWebhooksEvent::updateWebhook($data['dst_num'], $data);
             } else {
-                SipuniWebhooksEvent::createWebhook($data['call_id'], $data);
+                SipuniWebhooksEvent::createWebhook($data['dst_num'], $data);
             }
         }
     }
