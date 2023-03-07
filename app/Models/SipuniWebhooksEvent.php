@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 // use Illuminate\Support\Facades\Log;
 
 class SipuniWebhooksEvent extends Model
@@ -19,4 +20,23 @@ class SipuniWebhooksEvent extends Model
     protected $hidden = [
         'id',
     ];
+
+    /* CRUD METHODS */
+    public static function createWebhook(string $callId, array $data): void
+    {
+        self::create([
+            'lead_id' => $callId,
+            'data'    => json_encode($data),
+        ]);
+    }
+    public static function getWebhookByCallId(string $callId): ?SipuniWebhooksEvent
+    {
+        return self::whereCallId($callId)->first();
+    }
+    public static function updateWebhook(string $callId, array $data): void
+    {
+        self::whereCallId($callId)->update([
+            'data' => json_encode($data),
+        ]);
+    }
 }
