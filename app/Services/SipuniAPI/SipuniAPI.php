@@ -72,4 +72,32 @@ class SipuniAPI
 
         Log::info(__METHOD__, [$output]); //DELETE
     }
+    public function makeCallNumber(string $clientNumber, string $operatorNumber)
+    {
+        Log::info(__METHOD__, [$clientNumber, $operatorNumber]); //DELETE
+
+        $url     = 'https://sipuni.com/api/callback/call_number';
+        $reverse = '1';
+        $antiaon = '0';
+        $query   = http_build_query(array(
+            'antiaon'   => $antiaon,
+            'phone'     => $clientNumber,
+            'reverse'   => $reverse,
+            'sipnumber' => $operatorNumber,
+            'user'      => $this->user,
+            'hash'      => md5(join('+', [$antiaon, $clientNumber, $reverse, $operatorNumber, $this->user, $this->secretKey,])),
+        ));
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+
+        Log::info(__METHOD__, [$output]); //DELETE
+    }
 }

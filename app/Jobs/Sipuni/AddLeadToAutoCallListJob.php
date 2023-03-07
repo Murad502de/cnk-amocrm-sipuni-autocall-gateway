@@ -42,44 +42,12 @@ class AddLeadToAutoCallListJob implements ShouldQueue
      */
     public function handle()
     {
-        Log::info(__METHOD__, ['sipuni_call_id: ' . $this->lead->call->sipuni_call_id]); //DELETE
-        Log::info(__METHOD__, ['main_contact_number: ' . $this->lead->main_contact_number]); //DELETE
+        Log::info(__METHOD__); //DELETE
 
-        // $this->sipuni->addNumberToAutoCall($this->lead->call->sipuni_call_id, $this->lead->main_contact_number);
-        // $this->sipuni->deleteNumberFromAutoCall(
-        //     $this->lead->call->sipuni_call_id,
-        //     $this->lead->main_contact_number
-        // );
-
-        $user       = '042485';
-        $phone      = $this->lead->main_contact_number;
-        $reverse    = '1';
-        $antiaon    = '0';
-        $sipnumber  = '206';
-        $secret     = '0.sf43lo5l3gs';
-        $hashString = join('+', array($antiaon, $phone, $reverse, $sipnumber, $user, $secret));
-        $hash       = md5($hashString);
-        $url        = 'https://sipuni.com/api/callback/call_number';
-        $query      = http_build_query(array(
-            'antiaon'   => $antiaon,
-            'phone'     => $phone,
-            'reverse'   => $reverse,
-            'sipnumber' => $sipnumber,
-            'user'      => $user,
-            'hash'      => $hash,
-        ));
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $output = curl_exec($ch);
-
-        curl_close($ch);
-
-        Log::info(__METHOD__, [$output]); //DELETE
+        $this->sipuni->makeCallNumber(
+            $this->lead->main_contact_number,
+            $this->lead->call->operator_extension_number
+        );
 
         $this->lead->delete();
     }
