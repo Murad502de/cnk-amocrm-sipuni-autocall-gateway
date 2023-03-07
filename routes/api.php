@@ -28,7 +28,7 @@ Route::prefix('v1')->group(function () {
         });
 
         Route::prefix('sipuni')->group(function () {
-            Route::post('/', [WebhooksSipuniController1::class, 'index']);
+            Route::get('/', [WebhooksSipuniController1::class, 'index']);
         });
     });
 
