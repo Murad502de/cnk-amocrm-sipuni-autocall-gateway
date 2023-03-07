@@ -25,7 +25,7 @@ class SipuniWebhooksEvent extends Model
     public static function createWebhook(string $callId, array $data): void
     {
         self::create([
-            'lead_id' => $callId,
+            'call_id' => $callId,
             'data'    => json_encode($data),
         ]);
     }
