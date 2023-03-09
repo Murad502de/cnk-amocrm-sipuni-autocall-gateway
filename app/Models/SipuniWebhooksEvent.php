@@ -63,6 +63,7 @@ class SipuniWebhooksEvent extends Model
 
                 Log::info(__METHOD__, $callWebhookData); //DELETE
                 Log::info(__METHOD__, ['dst_num: ' . $callWebhookData['dst_num']]); //DELETE
+                Log::info(__METHOD__, ['status: ' . $callWebhookData['status']]); //DELETE
             }
 
             // $callWebhook->delete(); //TODO
