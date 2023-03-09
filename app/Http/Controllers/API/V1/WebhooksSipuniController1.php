@@ -15,7 +15,7 @@ class WebhooksSipuniController1 extends Controller
         Log::info(__METHOD__, $request->all()); //DELETE
 
         if (isset($request->all()['status'])) {
-            Log::info(__METHOD__, ['callStatus: ' . $request->all()['status']]); //DELETE
+            // Log::info(__METHOD__, ['callStatus: ' . $request->all()['status']]); //DELETE
 
             $this->handle($request->all());
         }
