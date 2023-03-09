@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Lead;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
@@ -54,6 +55,15 @@ class SipuniWebhooksEvent extends Model
 
         foreach ($callWebhooks as $callWebhook) {
             Log::info(__METHOD__, [$callWebhook]); //DELETE
+
+            if ($lead = Lead::whereMainContactNumber($callWebhook->dst_num)->first()) {
+                Log::info(__METHOD__, $lead); //DELETE
+
+                $callWebhookData = json_decode($callWebhook->data, true);
+
+                Log::info(__METHOD__, $callWebhookData); //DELETE
+                Log::info(__METHOD__, ['dst_num: ' . $callWebhookData['dst_num']]); //DELETE
+            }
 
             $callWebhook->delete();
         }
