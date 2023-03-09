@@ -57,7 +57,7 @@ class SipuniWebhooksEvent extends Model
             Log::info(__METHOD__, [$callWebhook]); //DELETE
 
             if ($lead = Lead::whereMainContactNumber($callWebhook->dst_num)->first()) {
-                Log::info(__METHOD__, $lead); //DELETE
+                Log::info(__METHOD__, [$lead]); //DELETE
 
                 $callWebhookData = json_decode($callWebhook->data, true);
 
@@ -65,7 +65,7 @@ class SipuniWebhooksEvent extends Model
                 Log::info(__METHOD__, ['dst_num: ' . $callWebhookData['dst_num']]); //DELETE
             }
 
-            $callWebhook->delete();
+            // $callWebhook->delete(); //TODO
         }
     }
 }
