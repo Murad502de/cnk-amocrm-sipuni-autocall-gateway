@@ -71,6 +71,8 @@ class SipuniWebhooksEvent extends Model
                     Log::info(__METHOD__, ['set job with delay (min): ' . $lead->call->auto_redial_delay]); //DELETE
 
                     AddLeadToAutoCallListJob::dispatch($lead)->delay(now()->addMinutes($lead->call->auto_redial_delay));
+                } else {
+                    $lead->delete();
                 }
             }
 
