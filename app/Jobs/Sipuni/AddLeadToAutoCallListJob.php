@@ -49,7 +49,9 @@ class AddLeadToAutoCallListJob implements ShouldQueue
             $this->lead->call->operator_extension_number
         );
 
-        // $this->lead->delete(); //DELETE
+        $this->lead->auto_redial_attempt += 1;
+
+        $this->lead->save();
     }
 
     public function middleware()

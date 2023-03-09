@@ -68,7 +68,8 @@ class SipuniWebhooksEvent extends Model
                 Log::info(__METHOD__, ['status: ' . $callWebhookData['status']]); //DELETE
 
                 if (
-                    $callWebhookData['status'] !== self::SUCCESS_STATUS
+                    $callWebhookData['status'] !== self::SUCCESS_STATUS &&
+                    $lead->auto_redial_attempt <= $lead->call->auto_redial_attempts
                 ) {
                     Log::info(__METHOD__, ['set job with delay (min): ' . $lead->call->auto_redial_delay]); //DELETE
 

@@ -124,6 +124,7 @@ class AmoWebhooksLead extends Model
             $lead->processing          = false;
             $lead->when_available      = time();
             $lead->call_id             = $call->id;
+            $lead->auto_redial_attempt = 1;
 
             $lead->save();
         }
