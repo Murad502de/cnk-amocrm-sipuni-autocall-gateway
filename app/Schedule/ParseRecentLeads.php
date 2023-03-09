@@ -29,14 +29,14 @@ class ParseRecentLeads
             Log::info(__METHOD__, [$lead->call]); //DELETE
 
             if ($lead->isBusinessHours()) {
-                Log::info(__METHOD__, ['ok']); //DELETE
+                Log::info(__METHOD__, ['is business hours']); //DELETE
 
                 AddLeadToAutoCallListJob::dispatch($lead);
 
                 $lead->processing = true;
                 $lead->save();
             } else {
-                Log::info(__METHOD__, ['not ok']); //DELETE
+                Log::info(__METHOD__, ['is not business hours']); //DELETE
             }
         }
     }
