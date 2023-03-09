@@ -49,7 +49,7 @@ class AddLeadToAutoCallListJob implements ShouldQueue
             $this->lead->call->operator_extension_number
         );
 
-        $this->lead->delete();
+        // $this->lead->delete(); //DELETE
     }
 
     public function middleware()

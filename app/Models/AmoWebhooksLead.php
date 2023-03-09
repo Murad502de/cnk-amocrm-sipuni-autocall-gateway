@@ -126,8 +126,6 @@ class AmoWebhooksLead extends Model
             $lead->call_id             = $call->id;
 
             $lead->save();
-
-            // AddLeadToAutoCallListJob::dispatch($lead);
         }
     }
 

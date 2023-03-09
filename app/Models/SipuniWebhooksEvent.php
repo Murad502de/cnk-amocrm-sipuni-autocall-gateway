@@ -28,7 +28,7 @@ class SipuniWebhooksEvent extends Model
             'data'    => json_encode($data),
         ]);
     }
-    public static function getWebhookByCallId(string $dstNum): ?SipuniWebhooksEvent
+    public static function getWebhookByDstNum(string $dstNum): ?SipuniWebhooksEvent
     {
         return self::whereDstNum($dstNum)->first();
     }
@@ -55,7 +55,7 @@ class SipuniWebhooksEvent extends Model
         foreach ($callWebhooks as $callWebhook) {
             Log::info(__METHOD__, [$callWebhook]); //DELETE
 
-            // $callWebhook->delete(); //TODO
+            $callWebhook->delete();
         }
     }
 }
