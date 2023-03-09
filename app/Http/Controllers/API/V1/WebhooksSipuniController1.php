@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\API\V1\WebhooksSipuniEventRequest1;
 use App\Models\SipuniWebhooksEvent;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
+
+// use Illuminate\Support\Facades\Log;
 
 class WebhooksSipuniController1 extends Controller
 {
     public function index(WebhooksSipuniEventRequest1 $request)
     {
-        Log::info(__METHOD__, $request->all()); //DELETE
+        // Log::info(__METHOD__, $request->all()); //DELETE
 
         if (isset($request->all()['status'])) {
             // Log::info(__METHOD__, ['callStatus: ' . $request->all()['status']]); //DELETE
