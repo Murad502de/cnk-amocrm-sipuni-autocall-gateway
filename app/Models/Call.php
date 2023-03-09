@@ -20,6 +20,7 @@ class Call extends Model
         'end_work_hours',
         'end_work_minutes',
         'auto_redial_delay',
+        'auto_redial_attempts',
     ];
     protected $hidden = [
         'id',
