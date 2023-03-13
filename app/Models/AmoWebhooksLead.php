@@ -119,7 +119,7 @@ class AmoWebhooksLead extends Model
             $lead->uuid                = Lead::generateUuid();
             $lead->amo_id              = $leadWebhookData['id'];
             $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
-            $lead->main_contact_number = preg_replace('/\D/', '', $mainContactNumber);
+            $lead->main_contact_number = $mainContactNumber;
             $lead->available           = true;
             $lead->processing          = false;
             $lead->when_available      = time();
@@ -138,7 +138,12 @@ class AmoWebhooksLead extends Model
         foreach ($leadWebhooks as $leadWebhook) {
             $lead              = self::fetchLeadById($leadWebhook->lead_id);
             $mainContact       = self::fetchContactById((int) self::getMainContactIdFromLeadBody($lead));
-            $mainContactNumber = (string) self::getMainContactWorkNumber($mainContact);
+            $mainContactNumber = preg_replace('/\D/', '', (string) self::getMainContactWorkNumber($mainContact));
+
+            if ($mainContactNumber[0] === '8') {
+                $mainContactNumber[0] = '7';
+            }
+
             // $leadWebhookData   = json_decode($leadWebhook->data, true);
 
             Log::info(__METHOD__, ['mainContactNumber: ' . $mainContactNumber]); //DELETE
@@ -147,7 +152,7 @@ class AmoWebhooksLead extends Model
                 Log::info(__METHOD__, ['lead must update']); //DELETE
 
                 $lead->update([
-                    'main_contact_number' => $mainContactNumber,
+                    'main_contact_number' => $mainContactNumber, //FIXME
                     // 'amo_pipeline_id'     => (int) $leadWebhookData['pipeline_id'],
                 ]);
             } else {
