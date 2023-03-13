@@ -80,22 +80,26 @@ class Lead extends Model
     }
 
     /* FETCH-METHODS */
-    public function fetchLeadById(int $id): array
+    public function fetchLeadById(int $id): ?array
     {
         $findLeadByIdResponse = $this->AMO_API->findLeadById($id);
 
         if ($findLeadByIdResponse['code'] !== Response::HTTP_OK) {
-            throw new NotFoundException('lead not found by id: ' . $id);
+            // throw new NotFoundException('lead not found by id: ' . $id);
+
+            return null;
         }
 
         return $findLeadByIdResponse['body'];
     }
-    public function fetchContactById(int $id): array
+    public function fetchContactById(int $id): ?array
     {
         $findLeadByIdResponse = $this->AMO_API->findContactById($id);
 
         if ($findLeadByIdResponse['code'] !== Response::HTTP_OK) {
-            throw new NotFoundException('main contact not found');
+            // throw new NotFoundException('main contact not found');
+            
+            return null;
         }
 
         return $findLeadByIdResponse['body'];

@@ -136,33 +136,45 @@ class AmoWebhooksLead extends Model
         $leadWebhooks = self::getLeadWebhooks();
 
         foreach ($leadWebhooks as $leadWebhook) {
-            $lead              = self::fetchLeadById($leadWebhook->lead_id);
-            $mainContact       = self::fetchContactById((int) self::getMainContactIdFromLeadBody($lead));
-            $mainContactNumber = preg_replace('/\D/', '', (string) self::getMainContactWorkNumber($mainContact));
+            $lead = self::fetchLeadById($leadWebhook->lead_id);
 
-            Log::info(__METHOD__, ['mainContactNumber before: ' . $mainContactNumber]); //DELETE
+            if ($lead) {
+                $mainContact = self::fetchContactById((int) self::getMainContactIdFromLeadBody($lead));
 
-            if ($mainContactNumber) {
-                if ($mainContactNumber[0] === '8') {
-                    $mainContactNumber[0] = '7';
-                }
+                if ($mainContact) {
+                    $mainContactNumber = preg_replace('/\D/', '', (string) self::getMainContactWorkNumber($mainContact));
 
-                // $leadWebhookData   = json_decode($leadWebhook->data, true);
+                    Log::info(__METHOD__, ['mainContactNumber before: ' . $mainContactNumber]); //DELETE
 
-                Log::info(__METHOD__, ['mainContactNumber after: ' . $mainContactNumber]); //DELETE
+                    if ($mainContactNumber) {
+                        if ($mainContactNumber[0] === '8') {
+                            $mainContactNumber[0] = '7';
+                        }
 
-                if ($lead = Lead::getByAmoId((int) $leadWebhook->lead_id)) {
-                    Log::info(__METHOD__, ['lead must update']); //DELETE
+                        // $leadWebhookData   = json_decode($leadWebhook->data, true);
 
-                    $lead->update([
-                        'main_contact_number' => $mainContactNumber, //FIXME
-                        // 'amo_pipeline_id'     => (int) $leadWebhookData['pipeline_id'],
-                    ]);
+                        Log::info(__METHOD__, ['mainContactNumber after: ' . $mainContactNumber]); //DELETE
+
+                        if ($lead = Lead::getByAmoId((int) $leadWebhook->lead_id)) {
+                            Log::info(__METHOD__, ['lead must update']); //DELETE
+
+                            $lead->update([
+                                'main_contact_number' => $mainContactNumber, //FIXME
+                                // 'amo_pipeline_id'     => (int) $leadWebhookData['pipeline_id'],
+                            ]);
+                        } else {
+                            Log::info(__METHOD__, ['lead must process']); //DELETE
+
+                            self::processWebhook($leadWebhook, $mainContactNumber);
+                        }
+                    } else {
+                        Log::info(__METHOD__, ['main contact number not found']); //DELETE
+                    }
                 } else {
-                    Log::info(__METHOD__, ['lead must process']); //DELETE
-
-                    self::processWebhook($leadWebhook, $mainContactNumber);
+                    Log::info(__METHOD__, ['contact not found']); //DELETE
                 }
+            } else {
+                Log::info(__METHOD__, ['lead not found']); //DELETE
             }
 
             $leadWebhook->delete(); //TODO
