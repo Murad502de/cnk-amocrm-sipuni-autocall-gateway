@@ -140,13 +140,15 @@ class AmoWebhooksLead extends Model
             $mainContact       = self::fetchContactById((int) self::getMainContactIdFromLeadBody($lead));
             $mainContactNumber = preg_replace('/\D/', '', (string) self::getMainContactWorkNumber($mainContact));
 
-            if ($mainContactNumber[0] === '8') {
+            Log::info(__METHOD__, ['mainContactNumber before: ' . $mainContactNumber]); //DELETE
+
+            if ($mainContactNumber && $mainContactNumber[0] === '8') {
                 $mainContactNumber[0] = '7';
             }
 
             // $leadWebhookData   = json_decode($leadWebhook->data, true);
 
-            Log::info(__METHOD__, ['mainContactNumber: ' . $mainContactNumber]); //DELETE
+            Log::info(__METHOD__, ['mainContactNumber after: ' . $mainContactNumber]); //DELETE
 
             if ($lead = Lead::getByAmoId((int) $leadWebhook->lead_id)) {
                 Log::info(__METHOD__, ['lead must update']); //DELETE
