@@ -142,25 +142,27 @@ class AmoWebhooksLead extends Model
 
             Log::info(__METHOD__, ['mainContactNumber before: ' . $mainContactNumber]); //DELETE
 
-            if ($mainContactNumber && $mainContactNumber[0] === '8') {
-                $mainContactNumber[0] = '7';
-            }
+            if ($mainContactNumber) {
+                if ($mainContactNumber[0] === '8') {
+                    $mainContactNumber[0] = '7';
+                }
 
-            // $leadWebhookData   = json_decode($leadWebhook->data, true);
+                // $leadWebhookData   = json_decode($leadWebhook->data, true);
 
-            Log::info(__METHOD__, ['mainContactNumber after: ' . $mainContactNumber]); //DELETE
+                Log::info(__METHOD__, ['mainContactNumber after: ' . $mainContactNumber]); //DELETE
 
-            if ($lead = Lead::getByAmoId((int) $leadWebhook->lead_id)) {
-                Log::info(__METHOD__, ['lead must update']); //DELETE
+                if ($lead = Lead::getByAmoId((int) $leadWebhook->lead_id)) {
+                    Log::info(__METHOD__, ['lead must update']); //DELETE
 
-                $lead->update([
-                    'main_contact_number' => $mainContactNumber, //FIXME
-                    // 'amo_pipeline_id'     => (int) $leadWebhookData['pipeline_id'],
-                ]);
-            } else {
-                Log::info(__METHOD__, ['lead must process']); //DELETE
+                    $lead->update([
+                        'main_contact_number' => $mainContactNumber, //FIXME
+                        // 'amo_pipeline_id'     => (int) $leadWebhookData['pipeline_id'],
+                    ]);
+                } else {
+                    Log::info(__METHOD__, ['lead must process']); //DELETE
 
-                self::processWebhook($leadWebhook, $mainContactNumber);
+                    self::processWebhook($leadWebhook, $mainContactNumber);
+                }
             }
 
             $leadWebhook->delete(); //TODO
