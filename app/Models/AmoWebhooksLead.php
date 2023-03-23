@@ -111,28 +111,30 @@ class AmoWebhooksLead extends Model
     {
         $leadWebhookData = json_decode($leadWebhook->data, true);
 
-        if ($call = Call::whereAmoPipelineId((int) $leadWebhookData['pipeline_id'])->first()) {
-            Log::info(__METHOD__, ['leadWebhook is target']); //DELETE
+        if (array_key_exists('pipeline_id', $leadWebhookData)) {
+            if ($call = Call::whereAmoPipelineId((int) $leadWebhookData['pipeline_id'])->first()) {
+                Log::info(__METHOD__, ['leadWebhook is target']); //DELETE
 
-            $lead = new Lead();
+                $lead = new Lead();
 
-            $lead->call_id = $call->id;
+                $lead->call_id = $call->id;
 
-            if ($lead->isBusinessHours()) {
-                Log::info(__METHOD__, ['is business hours']); //DELETE
+                if ($lead->isBusinessHours()) {
+                    Log::info(__METHOD__, ['is business hours']); //DELETE
 
-                $lead->uuid                = Lead::generateUuid();
-                $lead->amo_id              = $leadWebhookData['id'];
-                $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
-                $lead->main_contact_number = $mainContactNumber;
-                $lead->available           = true;
-                $lead->processing          = false;
-                $lead->when_available      = time();
-                $lead->auto_redial_attempt = 1;
+                    $lead->uuid                = Lead::generateUuid();
+                    $lead->amo_id              = $leadWebhookData['id'];
+                    $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
+                    $lead->main_contact_number = $mainContactNumber;
+                    $lead->available           = true;
+                    $lead->processing          = false;
+                    $lead->when_available      = time();
+                    $lead->auto_redial_attempt = 1;
 
-                $lead->save();
-            } else {
-                Log::info(__METHOD__, ['is not business hours']); //DELETE
+                    $lead->save();
+                } else {
+                    Log::info(__METHOD__, ['is not business hours']); //DELETE
+                }
             }
         }
     }
