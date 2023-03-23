@@ -100,4 +100,33 @@ class SipuniAPI
 
         Log::info(__METHOD__, [$output]); //DELETE
     }
+    public function makeCallTree(string $clientNumber, string $operatorNumber, string $treeNumber)
+    {
+        Log::info(__METHOD__, [$clientNumber, $operatorNumber]); //DELETE
+
+        $url     = 'https://sipuni.com/api/callback/call_tree';
+        $reverse = '0';
+        $antiaon = '0';
+        $query   = http_build_query([
+            'antiaon'   => $antiaon,
+            'phone'     => $clientNumber,
+            'reverse'   => $reverse,
+            'sipnumber' => $operatorNumber,
+            'tree'      => $treeNumber,
+            'user'      => $this->user,
+            'hash'      => md5(join('+', [$antiaon, $clientNumber, $reverse, $operatorNumber, $treeNumber, $this->user, $this->secretKey])),
+        ]);
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $output = curl_exec($ch);
+
+        curl_close($ch);
+
+        Log::info(__METHOD__, [$output]); //DELETE
+    }
 }
