@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
             ->name('parse_recent_leads')
             ->withoutOverlapping()
             ->everyMinute();
-        $schedule->exec((new StartQueueProcessing)())
+        $schedule->exec((new StartQueueProcessing)(true))
             ->name('start_queue_processing')
             ->everyMinute();
     }
