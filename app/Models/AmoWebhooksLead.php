@@ -116,17 +116,24 @@ class AmoWebhooksLead extends Model
 
             $lead = new Lead();
 
-            $lead->uuid                = Lead::generateUuid();
-            $lead->amo_id              = $leadWebhookData['id'];
-            $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
-            $lead->main_contact_number = $mainContactNumber;
-            $lead->available           = true;
-            $lead->processing          = false;
-            $lead->when_available      = time();
-            $lead->call_id             = $call->id;
-            $lead->auto_redial_attempt = 1;
+            $lead->call_id = $call->id;
 
-            $lead->save();
+            if ($lead->isBusinessHours()) {
+                Log::info(__METHOD__, ['is business hours']); //DELETE
+
+                $lead->uuid                = Lead::generateUuid();
+                $lead->amo_id              = $leadWebhookData['id'];
+                $lead->amo_pipeline_id     = $leadWebhookData['pipeline_id'];
+                $lead->main_contact_number = $mainContactNumber;
+                $lead->available           = true;
+                $lead->processing          = false;
+                $lead->when_available      = time();
+                $lead->auto_redial_attempt = 1;
+
+                $lead->save();
+            } else {
+                Log::info(__METHOD__, ['is not business hours']); //DELETE
+            }
         }
     }
 
