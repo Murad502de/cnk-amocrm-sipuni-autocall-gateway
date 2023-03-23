@@ -44,10 +44,22 @@ class AddLeadToAutoCallListJob implements ShouldQueue
     {
         Log::info(__METHOD__); //DELETE
 
-        $this->sipuni->makeCallNumber(
-            $this->lead->main_contact_number,
-            $this->lead->call->operator_extension_number
-        );
+        if ($this->lead->call->call_through_tree) {
+            Log::info(__METHOD__, ['makeCallTree']); //DELETE
+
+            $this->sipuni->makeCallTree(
+                $this->lead->main_contact_number,
+                $this->lead->call->operator_extension_number,
+                $this->lead->call->tree_number
+            );
+        } else {
+            Log::info(__METHOD__, ['makeCallNumber']); //DELETE
+
+            $this->sipuni->makeCallNumber(
+                $this->lead->main_contact_number,
+                $this->lead->call->operator_extension_number
+            );
+        }
 
         $this->lead->auto_redial_attempt += 1;
 
