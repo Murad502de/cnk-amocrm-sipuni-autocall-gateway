@@ -28,16 +28,21 @@ class ParseRecentLeads
             Log::info(__METHOD__, [$lead]); //DELETE
             Log::info(__METHOD__, [$lead->call]); //DELETE
 
-            if ($lead->isBusinessHours()) {
-                Log::info(__METHOD__, ['is business hours']); //DELETE
+            // if ($lead->isBusinessHours()) {
+            //     Log::info(__METHOD__, ['is business hours']); //DELETE
 
-                AddLeadToAutoCallListJob::dispatch($lead);
+            //     AddLeadToAutoCallListJob::dispatch($lead);
 
-                $lead->processing = true;
-                $lead->save();
-            } else {
-                Log::info(__METHOD__, ['is not business hours']); //DELETE
-            }
+            //     $lead->processing = true;
+            //     $lead->save();
+            // } else {
+            //     Log::info(__METHOD__, ['is not business hours']); //DELETE
+            // }
+
+            AddLeadToAutoCallListJob::dispatch($lead);
+
+            $lead->processing = true;
+            $lead->save();
         }
     }
 
