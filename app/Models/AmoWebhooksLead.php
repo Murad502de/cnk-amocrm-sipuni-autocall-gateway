@@ -75,6 +75,10 @@ class AmoWebhooksLead extends Model
             return null;
         }
 
+        if (!array_key_exists('custom_fields_values', $contact)) {
+            return null;
+        }
+
         foreach ($contact['custom_fields_values'] as $customField) {
             if ($customField['field_code'] === 'PHONE') {
                 foreach ($customField['values'] as $customFieldValue) {
