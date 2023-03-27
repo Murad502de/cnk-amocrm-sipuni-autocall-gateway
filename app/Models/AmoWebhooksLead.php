@@ -79,6 +79,9 @@ class AmoWebhooksLead extends Model
             return null;
         }
 
+        Log::info(__METHOD__, ['custom_fields_values']); //DELETE
+        Log::info(__METHOD__, [$contact['custom_fields_values']]); //DELETE
+
         foreach ($contact['custom_fields_values'] as $customField) {
             if ($customField['field_code'] === 'PHONE') {
                 foreach ($customField['values'] as $customFieldValue) {
