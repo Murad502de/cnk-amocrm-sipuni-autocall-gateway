@@ -75,7 +75,11 @@ class AmoWebhooksLead extends Model
             return null;
         }
 
-        if (!array_key_exists('custom_fields_values', $contact)) {
+        // if (!array_key_exists('custom_fields_values', $contact)) {
+        //     return null;
+        // }
+
+        if (!$contact['custom_fields_values']) {
             return null;
         }
 
