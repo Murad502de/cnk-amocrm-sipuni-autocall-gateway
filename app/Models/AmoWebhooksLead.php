@@ -79,6 +79,8 @@ class AmoWebhooksLead extends Model
             return null;
         }
 
+        Log::info(__METHOD__, ['contact']); //DELETE
+        Log::info(__METHOD__, [$contact]); //DELETE
         Log::info(__METHOD__, ['custom_fields_values']); //DELETE
         Log::info(__METHOD__, [$contact['custom_fields_values']]); //DELETE
 
