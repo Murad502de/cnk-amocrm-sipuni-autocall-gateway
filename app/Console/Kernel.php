@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Schedule\ClearCache;
 use App\Schedule\ParseRecentLeads;
 use App\Schedule\ParseRecentWebhooks;
 use App\Schedule\StartQueueProcessing;
@@ -29,6 +30,9 @@ class Kernel extends ConsoleKernel
         $schedule->exec((new StartQueueProcessing)())
             ->name('start_queue_processing')
             ->everyMinute();
+        $schedule->exec((new ClearCache)())
+            ->name('start_clear_cache')
+            ->hourly();
     }
 
     /**
