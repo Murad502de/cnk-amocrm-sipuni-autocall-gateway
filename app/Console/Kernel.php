@@ -30,9 +30,9 @@ class Kernel extends ConsoleKernel
         $schedule->exec((new StartQueueProcessing)())
             ->name('start_queue_processing')
             ->everyMinute();
-        $schedule->exec((new ClearCache)())
-            ->name('start_clear_cache')
-            ->hourly();
+        // $schedule->exec((new ClearCache)())
+        //     ->name('start_clear_cache')
+        //     ->hourly();
     }
 
     /**
